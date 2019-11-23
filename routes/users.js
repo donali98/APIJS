@@ -7,5 +7,6 @@ router.post("/insert", UserController.insert);
 router.get("/:username", UserController.getOne);
 router.get("/", UserController.getAll);
 router.put("/:username", UserController.update);
+router.delete("/:username", UserController.deleteOne);
 
 module.exports = router;

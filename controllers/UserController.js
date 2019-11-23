@@ -3,7 +3,7 @@ var debug = require("debug")("controller:a");
 
 // Search a one user y database
 const getOne = (req, res, next) => {
-  debug("Search User", req.params);
+  //   debug("Search User", req.params);
   User.findOne(
     {
       username: req.params.username
@@ -15,7 +15,7 @@ const getOne = (req, res, next) => {
       else return res.status(404).json({ message: "No hay registros" });
     })
     .catch(err => {
-      //   return res.status(500).json({ message: "Ha ocurrido un error" });
+      // return res.status(500).json({ message: "Ha ocurrido un error" });
       next(err);
     });
 };
@@ -42,9 +42,9 @@ const getAll = (req, res, next) => {
 };
 
 const insert = (req, res, next) => {
-  debug("New User", {
-    body: req.body
-  });
+  //   debug("New User", {
+  //     body: req.body
+  //   });
   //Buscar usuario en la base para validar si existe o no
   User.findOne(
     {
@@ -104,7 +104,21 @@ const update = (req, res, next) => {
   )
     .then(updated => {
       if (updated) return res.status(200).json(updated);
-      else return res.status(400).json(null);
+      else
+        return res
+          .status(400)
+          .json({ message: "Ha ocurrido un error al actualizar" });
+    })
+    .catch(err => {
+      next(err);
+    });
+};
+
+const deleteOne = (req, res, next) => {
+  User.findOneAndDelete({ username: req.params.username })
+    .then(data => {
+      if (data) res.status(200).json(data);
+      else res.status(404).send();
     })
     .catch(err => {
       next(err);
@@ -115,5 +129,6 @@ module.exports = {
   insert,
   getOne,
   getAll,
-  update
+  update,
+  deleteOne
 };
